@@ -1,2 +1,0 @@
-# antibiotic-resistance-ai
-
