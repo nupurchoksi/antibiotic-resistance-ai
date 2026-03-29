@@ -225,6 +225,9 @@ def run_all_models(df_primary, df_secondary):
 
     print("\n✅ All models saved successfully!")
 
+# Return needed objects for explainability
+    return xgb1, X1_te, FEATURES_EXT
+
 def basic_insights(df_primary):
     print("\n📝 Basic Insights:")
 

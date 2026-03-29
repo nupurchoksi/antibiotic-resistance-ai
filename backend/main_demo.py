@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
-from prediction import predict_resistance
-
+from backend.prediction import predict_resistance
+from backend.recommendation import recommend_antibiotics
 # =========================
 # Fix Paths (IMPORTANT)
 # =========================
