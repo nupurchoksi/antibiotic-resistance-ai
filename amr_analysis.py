@@ -111,9 +111,79 @@ contributions = explain_prediction(xgb1, sample, FEATURES_EXT)
 print_explanation(contributions)
 
 print("Done explainability")
+# =========================
+# Step 9 — Model Demo (Prediction + Recommendations)
+# =========================
+print("Step 9 — Running Model Demo...")
 
+from backend.prediction import predict_resistance
+from backend.recommendation import recommend_antibiotics
+from backend.main_demo import compare_drugs   # if exists separately
+# =========================
+# Prediction
+# =========================
 
+# Create dummy input (same logic as your demo)
+expected_base_len = xgb1.n_features_in_ - 2
+sample_input = [0] * expected_base_len
+
+result = predict_resistance(sample_input)
+
+print("\n🔮 Prediction Result:")
+print(f"Prediction : {result['prediction']}")
+print(f"Confidence : {result['confidence']*100:.2f}%")
+
+# =========================
+# Recommendation
+# =========================
+
+bacteria = "Escherichia coli"
+print(f"\n🦠 Bacteria: {bacteria}")
+
+recs = recommend_antibiotics(bacteria)
+
+print("\n💊 Recommended Antibiotics:")
+
+for drug, rate in recs:
+    if rate < 0.2:
+        tag = "🟢 Highly Effective"
+    elif rate < 0.4:
+        tag = "🟡 Moderate"
+    else:
+        tag = "🔴 Avoid"
+
+    print(f"{drug} → {rate*100:.1f}% resistance ({tag})")
+
+# =========================
+# Best & Worst
+# =========================
+
+if recs:
+    best = recs[0]
+    worst = recs[-1]
+
+    print(f"\n🏆 Best Option: {best[0]} ({best[1]*100:.1f}%)")
+    print(f"💀 Worst Option: {worst[0]} ({worst[1]*100:.1f}%)")
+
+# =========================
+# Drug Comparison
+# =========================
+
+print("\n📊 Drug Comparison:")
+compare_drugs(bacteria)
+
+# =========================
+# Clinical Insight
+# =========================
+
+if result['prediction'] == "Resistant":
+    print("\n🚨 High resistance detected — avoid commonly resistant antibiotics.")
+elif result['prediction'] == "Susceptible":
+    print("\n✅ Most antibiotics are likely effective.")
+else:
+    print("\n⚠️ Intermediate resistance — use caution in treatment selection.")
 # =========================
 # FINAL
 # =========================
 print("\n✅ All done! Check outputs/figures/ and outputs/models/")
+
